@@ -42,7 +42,7 @@ const Home = () => {
 
   // 🎞️ Replace with your actual background image URLs
   const backgroundImages = [
-    'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0000%20(1).jpg',
+    'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0000.jpg',
     'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0004.jpg',
     'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0005.jpg',
   ];
