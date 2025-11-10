@@ -235,21 +235,24 @@
   font-size: 1.1rem;
   color: #eee5e5;
 }
-/* Grid container for products */
+
 /* Grid container for products */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1px;
+  padding: 2px;
+  justify-content: center;
 }
 
 /* Mobile view - exactly 2 products per row */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
+    padding: 1px;
     gap: 12px;
   }
+  
 }
 
 /* Very small screens - 1 product per row */
@@ -269,44 +272,53 @@
   padding: 10px;
   text-align: center;
   transition: box-shadow 0.2s ease-in-out;
-  width: 100%;
+  width: 280;
   max-width: none;
-  height: 300px; /* 🔹 fixed card height */
+  /* 🔹 Remove fixed card height */
+  /* height: 300px; */
+  box-sizing: border-box;
 }
 
 .card:hover {
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Make all images the same size */
+/* ✅ Make all images uniform and centered */
 .card img {
   width: 100%;
-  height: 150px; /* 🔹 fixed image height */
+  height: 230px;              /* fixed image height */
+  object-fit: cover;          /* crops instead of stretching */
   border-radius: 4px;
-  object-fit: cover; /* ensures image fills box without distortion */
+  display: block;
+  background: #f9f9f9;        /* placeholder background */
 }
 
-/* Card content section */
+/* ✅ Ensure content section aligns neatly */
 .card-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* pushes button to bottom */
+  justify-content: space-between;
   flex-grow: 1;
   width: 100%;
   padding-top: 8px;
+  min-height: 70px;           /* keeps content balanced */
 }
 
 .card h3 {
   font-size: 0.9rem;
   margin: 5px 0;
-  flex-shrink: 0;
+  color: #1b8cce;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .card p {
   font-size: 0.8rem;
   color: #555;
   margin: 0 0 8px;
-  flex-grow: 1; /* ensures equal spacing */
+  flex-grow: 1;
 }
 
 .card button {
@@ -318,6 +330,11 @@
   border-radius: 3px;
   cursor: pointer;
   align-self: center;
+  transition: background 0.2s;
+}
+
+.card button:hover {
+  background: #222;
 }
 
 .card button:disabled {
@@ -325,24 +342,60 @@
   cursor: not-allowed;
 }
 
-/* Mobile tweaks */
+/* ✅ Mobile tweaks */
 @media (max-width: 768px) {
   .card {
-    height: 260px; /* slightly shorter on mobile */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto; /* 🔹 Allow card to adapt to content */
+    max-width: 260px; /* ✅ Make cards a bit wider but uniform */
+    padding: 12px; /* Balanced internal spacing */
+    overflow: hidden; /* Prevent overflow */
+    box-sizing: border-box;
   }
 
   .card img {
-    height: 130px; /* smaller images on mobile */
+    width: 100%;
+    height: 170px; /* ✅ Slightly taller for better visuals */
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden; /* ✅ Ensures child text doesn’t stretch card */
   }
 
   .card h3 {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    margin: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
   }
 
   .card p {
     font-size: 0.75rem;
+    margin: 3px 0 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card button {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    align-self: center;
   }
 }
+
+
 /* General Cart Page */
 .cart-page {
   max-width: 900px;
@@ -671,3 +724,5 @@
   margin-bottom: 10px;
   display: block;
 }
+
+

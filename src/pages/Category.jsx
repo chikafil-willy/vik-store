@@ -1,9 +1,8 @@
-// src/pages/Category.jsx
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { SearchContext } from '../context/SearchContext';
-import { usePagination } from '../context/PaginationContext'; // ✅ Import pagination context
+import { usePagination } from '../context/PaginationContext';
 
 // ✅ Map readable names to Supabase table names
 const tableMap = {
@@ -19,7 +18,6 @@ const Category = () => {
   const { name } = useParams();
   const { searchTerm } = useContext(SearchContext);
 
-  // ✅ Pull state and actions from pagination context
   const {
     products,
     totalPages,
@@ -30,11 +28,10 @@ const Category = () => {
     resetPage,
   } = usePagination();
 
-  // ✅ Convert category from URL into Supabase table name
   const decodedName = decodeURIComponent(name).toLowerCase().trim();
   const tableName = tableMap[decodedName];
+  const [selectedSize, setSelectedSize] = useState('');
 
-  // ✅ Reset and fetch whenever category changes
   useEffect(() => {
     resetPage();
     if (tableName) {
@@ -42,44 +39,75 @@ const Category = () => {
     }
   }, [tableName]);
 
-  // ✅ Filter products by search
-  const filteredProducts = products.filter((product) =>
-    product.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // ✅ Filter products by searchTerm and size text in name
+  const filteredProducts = products.filter((product) => {
+    const nameMatch = product.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const sizeMatch = selectedSize
+      ? product.name?.toLowerCase().includes(selectedSize.toLowerCase())
+      : true;
+    return nameMatch && sizeMatch;
+  });
+
+  const sizes = ['L', 'XL', 'XXL', '38', '41', '44', '45', '42'];
 
   return (
     <div className="page-container">
       <h2 className="category-title capitalize">{decodedName}</h2>
 
+      {/* ✅ Filter Bar */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '8px',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        {sizes.map((size) => (
+          <button
+            key={size}
+            onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '20px',
+              border: '1px solid #333',
+              backgroundColor: selectedSize === size ? '#333' : '#fff',
+              color: selectedSize === size ? '#fff' : '#333',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            {size}
+          </button>
+        ))}
+      </div>
+
       {filteredProducts.length === 0 ? (
-        <p>No products found in this category.</p>
+        <p>No products found for this category.</p>
       ) : (
         <>
-          {/* ✅ Product grid */}
           <div className="grid">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
-          {/* ✅ Pagination controls */}
           <div className="pagination">
             <button
               onClick={() => prevPage(tableName)}
               disabled={currentPage === 1}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
             >
               ⬅ Prev
             </button>
 
-            <span className="px-3 text-sm">
+            <span>
               Page {currentPage} of {totalPages}
             </span>
 
             <button
               onClick={() => nextPage(tableName)}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
             >
               Next ➡
             </button>

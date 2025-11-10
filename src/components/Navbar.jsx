@@ -1,74 +1,234 @@
-import React from "react";
+// Navbar.jsx
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { MdSearch, MdShoppingCart, MdHome, MdCategory, MdClear } from "react-icons/md";
+import {
+  MdSearch,
+  MdShoppingCart,
+  MdClear,
+  MdPersonAdd,
+  MdAccountCircle,
+  MdMenu,
+} from "react-icons/md";
+import { sendPasswordResetEmail, signOut, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import logo from "../assets/logo.png";
-import CategoryDropdown from "./CategoryDropdown";
+import CategoryDropdown from "./CategoryDropdown"; // ✅ restored
 import { useCart } from "../context/CartContext";
 import { useSearch } from "../context/SearchContext";
+import { auth } from "../firebase";
 
 const Navbar = () => {
   const { cart } = useCart();
   const { searchTerm, setSearchTerm } = useSearch();
   const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
+  const [user, setUser] = useState(null);
+  const [showAccountDropdown, setShowAccountDropdown] = useState(false);
+  const [showLoginDropdown, setShowLoginDropdown] = useState(false);
+  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const loginRef = useRef(null);
+  const accountRef = useRef(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => setUser(currentUser));
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (loginRef.current && !loginRef.current.contains(event.target)) {
+        setShowLoginDropdown(false);
+      }
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setShowAccountDropdown(false);
+      }
+      if (showHamburgerMenu && !event.target.closest(".hamburger-menu") && !event.target.closest(".hamburger-button")) {
+        setShowHamburgerMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showHamburgerMenu]);
+
+  const handleSignOut = async () => {
+    await signOut(auth);
+    setShowAccountDropdown(false);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError("");
+    try {
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      setShowLoginDropdown(false);
+      setLoginEmail("");
+      setLoginPassword("");
+    } catch {
+      setLoginError("Wrong email or password");
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!loginEmail) {
+      setLoginError("Please enter your email first");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, loginEmail);
+      alert("Password reset email sent! Check your inbox.");
+      setLoginError("");
+    } catch (err) {
+      setLoginError(err.message);
+    }
+  };
+
   return (
     <nav className="navbar">
-      <div className="navbar-left">
-        <Link to="/">
-          <img src={logo} alt="Logo" className="logo" />
-        </Link>
-      </div>
+      {isMobile ? (
+        <div style={{ display: "flex", flexDirection: "column", width: "100%", padding: "0 10px" }}>
+          {/* Mobile Top bar */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <button
+                onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}
+                className="hamburger-button"
+                style={{ background: "none", border: "none", cursor: "pointer", color: "#000" }}
+                title="Menu"
+              >
+                {showHamburgerMenu ? <MdClear size={26} /> : <MdMenu size={26} />}
+              </button>
+              <Link to="/"><img src={logo} alt="Logo" style={{ height: "35px" }} /></Link>
+            </div>
 
-      <div className="navbar-right">
-        {/* DESKTOP LINKS */}
-        <div className="desktop-only">
-          <Link to="/" className="nav-link">Home</Link>
-          <CategoryDropdown />
-        </div>
+            {/* Right icons */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Link to="/cart" className="cart-link" title="Cart">
+                <MdShoppingCart size={22} />
+                {cartItemCount > 0 && <span className="cart-count">{cartItemCount}</span>}
+              </Link>
 
-        {/* MOBILE ICON LINKS */}
-        <div className="mobile-only">
-          <Link to="/" className="nav-link" title="Home">
-            <MdHome size={22} />
-          </Link>
-          <div title="Category">
-            <CategoryDropdown icon={<MdCategory size={22} />} />
+              {user ? (
+                <div ref={accountRef} style={{ position: "relative" }}>
+                  <button onClick={() => setShowAccountDropdown(!showAccountDropdown)} style={{ background: "none", border: "none", cursor: "pointer" }} title="Account">
+                    <MdAccountCircle size={22} />
+                  </button>
+                  {showAccountDropdown && (
+                    <div style={{ position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "0.8rem", minWidth: "150px", zIndex: 1000 }}>
+                      <Link to="/profile" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Account</Link>
+                      <button onClick={handleSignOut} style={{ width: "100%", padding: "0.5rem", border: "none", background: "#007bff", color: "#fff", borderRadius: "6px", cursor: "pointer" }}>Sign Out</button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div ref={loginRef} style={{ position: "relative" }}>
+                  <button onClick={() => setShowLoginDropdown(!showLoginDropdown)} style={{ background: "none", border: "none", cursor: "pointer" }} title="Login/Sign Up">
+                    <MdPersonAdd size={22} />
+                  </button>
+                  {showLoginDropdown && (
+                    <div style={{ position: "fixed", top: "60px", left: "50%", transform: "translateX(-50%)", background: "#fff", boxShadow: "0 4px 15px rgba(0,0,0,0.2)", borderRadius: "10px", padding: "1rem", width: "90%", maxWidth: "360px", zIndex: 2000 }}>
+                      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                        <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
+                        <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
+                        <button style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
+                      </form>
+                      {loginError && <p style={{ color: "red", marginTop: "0.5rem" }}>{loginError}</p>}
+                      <button onClick={handleForgotPassword} style={{ display: "block", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", fontSize: "0.9rem" }}>Forgot Password?</button>
+                      <Link to="/signup" style={{ display: "block", textAlign: "center", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* SEARCH BAR WITH CLEAR BUTTON */}
-        <div className="search-container">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          {/* Search Bar */}
+          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+            <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ flex: 1, padding: "0.5rem", borderRadius: "12px", border: "1px solid #ccc", marginRight: "5px" }} />
+            <button style={{ background: "#007bff", border: "none", borderRadius: "9px", padding: "4px", color: "#fff", cursor: "pointer" }}><MdSearch size={20} /></button>
+            {searchTerm && <button onClick={() => setSearchTerm("")} style={{ background: "none", border: "none", marginLeft: "5px", cursor: "pointer", color: "#000" }}><MdClear size={20} /></button>}
+          </div>
 
-          {/* Search button */}
-          <button className="search-btn" type="button">
-            <MdSearch size={20} />
-          </button>
-
-          {/* Clear button (only shows if input has value) */}
-          {searchTerm && (
-            <button
-              className="clear-btn"
-              type="button"
-              onClick={() => setSearchTerm("")}
-            >
-              <MdClear size={20} />
-            </button>
+          {/* Hamburger Menu (Direct links) */}
+          {showHamburgerMenu && (
+            <div className="hamburger-menu" style={{ position: "absolute", top: "140px", left: 0, width: "100%", background: "#fff", boxShadow: "0 4px 10px rgba(0,0,0,0.15)", zIndex: 999, display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem 0", gap: "1rem" }}>
+              <Link to="/" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Home</Link>
+              <Link to="/category/shirts-and-polos" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Shirts & Polos</Link>
+              <Link to="/category/trousers" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Trousers</Link>
+              <Link to="/category/caps" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Caps</Link>
+              <Link to="/category/jewelries" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Jewelries</Link>
+              <Link to="/category/shoes" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Shoes</Link>
+              <Link to="/about" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>About Us</Link>
+            </div>
           )}
         </div>
+      ) : (
+        <>
+          {/* DESKTOP NAV */}
+          <div className="navbar-left">
+            <Link to="/"><img src={logo} alt="Logo" className="logo" /></Link>
+          </div>
 
-        {/* CART */}
-        <Link to="/cart" className="cart-link" title="Cart">
-          <MdShoppingCart size={22} />
-          <span className="cart-count">{cartItemCount}</span>
-        </Link>
-      </div>
+          <div className="navbar-right">
+            <Link to="/" className="nav-link">Home</Link>
+            <CategoryDropdown /> {/* ✅ Desktop category dropdown */}
+            <Link to="/about" className="nav-link">About Us</Link>
+
+            {user ? (
+              <div ref={accountRef} style={{ position: "relative" }}>
+                <button onClick={() => setShowAccountDropdown(!showAccountDropdown)} style={{ background: "none", border: "none", cursor: "pointer" }} title="Account">
+                  <MdAccountCircle size={24} />
+                </button>
+                {showAccountDropdown && (
+                  <div style={{ position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "0.5rem", minWidth: "150px", zIndex: 1000 }}>
+                    <Link to="/profile" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Account</Link>
+                    <button onClick={handleSignOut} style={{ width: "100%", padding: "0.5rem", border: "none", background: "#007bff", color: "#fff", borderRadius: "6px", cursor: "pointer" }}>Sign Out</button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div ref={loginRef} style={{ position: "relative" }}>
+                <button onClick={() => setShowLoginDropdown(!showLoginDropdown)} style={{ background: "none", border: "none", cursor: "pointer" }} title="Login/Sign Up">
+                  <MdPersonAdd size={24} />
+                </button>
+
+                {showLoginDropdown && (
+                  <div style={{ position: "absolute", top: "40px", right: 0, background: "#fff", boxShadow: "0 4px 15px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1.8rem", minWidth: "350px", zIndex: 1000 }}>
+                    <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                      <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
+                      <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
+                      <button type="submit" style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
+                    </form>
+                    {loginError && <p style={{ color: "red", marginTop: "0.5rem" }}>{loginError}</p>}
+                    <button onClick={handleForgotPassword} style={{ display: "block", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", fontSize: "0.9rem" }}>Forgot Password?</button>
+                    <Link to="/signup" style={{ display: "block", textAlign: "center", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="search-container">
+              <input type="text" className="search-input" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+              <button className="search-btn" type="button"><MdSearch size={20} /></button>
+              {searchTerm && <button className="clear-btn" type="button" onClick={() => setSearchTerm("")}><MdClear size={20} /></button>}
+            </div>
+
+            <Link to="/cart" className="cart-link" title="Cart">
+              <MdShoppingCart size={22} />
+              {cartItemCount > 0 && <span className="cart-count">{cartItemCount}</span>}
+            </Link>
+          </div>
+        </>
+      )}
     </nav>
   );
 };

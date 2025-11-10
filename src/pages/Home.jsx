@@ -3,6 +3,13 @@ import { useEffect, useState, useContext } from 'react';
 import supabase from '../supabaseClient';
 import ProductCard from '../components/ProductCard';
 import { SearchContext } from '../context/SearchContext';
+import Footer from '../components/Footer';
+
+// ✅ Import hero images from assets
+import hero1 from '../assets/hero1.jpg';
+import hero2 from '../assets/hero2.jpg';
+import hero3 from '../assets/hero3.jpg';
+import newsletterHero from '../assets/newsletter-hero.jpg'; // add your newsletter background here
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -32,7 +39,6 @@ const Home = () => {
       const shuffled = combined.sort(() => Math.random() - 0.5);
       setProducts(shuffled);
     };
-
     fetchAll();
   }, []);
 
@@ -40,13 +46,8 @@ const Home = () => {
     product.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 🎞️ Replace with your actual background image URLs
-  const backgroundImages = [
-    'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0000.jpg',
-    'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0004.jpg',
-    'https://vnwhmwwknjuzosarlump.supabase.co/storage/v1/object/public/images/IMG-20251024-WA0005.jpg',
-  ];
-
+  // 🎞️ Hero images from assets
+  const backgroundImages = [hero1, hero2, hero3];
   const [currentBg, setCurrentBg] = useState(0);
 
   useEffect(() => {
@@ -55,6 +56,26 @@ const Home = () => {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
+
+  // Newsletter state
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return setMessage("Please enter your email");
+
+    const { data, error } = await supabase
+      .from("newsletter")
+      .insert([{ email }]);
+
+    if (error) {
+      setMessage("Error subscribing: " + error.message);
+    } else {
+      setMessage("Subscribed successfully! 🎉");
+      setEmail("");
+    }
+  };
 
   return (
     <div className="home-container">
@@ -76,7 +97,8 @@ const Home = () => {
         <div className="overlay">
           <div className="welcome-message">
             <h2>Welcome to V6ix Collection</h2>
-            <p>Step into a world where fashion meets confidence and comfort.  
+            <p>
+              Step into a world where fashion meets confidence and comfort.  
               At <strong>V6ix Collection</strong>, we believe style should speak effortlessly,
               from timeless essentials to standout pieces that define elegance and class.
             </p>
@@ -94,11 +116,81 @@ const Home = () => {
               <ProductCard
                 product={product}
                 key={`${product.id}-${product._category}-${index}`}
+                className='home-card'
               />
             ))
           ) : (
             <p>No matching products found.</p>
           )}
+        </div>
+      </div>
+
+      {/* 📰 Newsletter Hero Section */}
+      <div
+        className="newsletter-hero"
+        style={{
+          backgroundImage: `url(${newsletterHero})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          padding: "80px 20px",
+          textAlign: "center",
+          color: "#fff",
+          margin: "40px 0",
+          borderRadius: "10px",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgba(0,0,0,0.6)",
+            padding: "40px",
+            borderRadius: "10px",
+            maxWidth: "600px",
+            margin: "0 auto",
+          }}
+        >
+          <h2 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+            Join the V6ix Collection Newsletter
+          </h2>
+          <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>
+            Stay updated on our latest arrivals, exclusive offers, and fashion tips!  
+            Be the first to know and elevate your style with us.
+          </p>
+
+          <form
+            onSubmit={handleSubscribe}
+            style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}
+          >
+            <input
+              type="email"
+              placeholder="Your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                padding: "0.8rem",
+                borderRadius: "6px",
+                border: "none",
+                flex: "1 0 250px",
+                maxWidth: "300px",
+              }}
+              required
+            />
+            <button
+              type="submit"
+              style={{
+                padding: "0.8rem 1.5rem",
+                borderRadius: "6px",
+                backgroundColor: "#ff416c",
+                border: "none",
+                color: "#fff",
+                cursor: "pointer",
+                flex: "0 0 auto",
+              }}
+            >
+              Subscribe
+            </button>
+          </form>
+          {message && <p style={{ marginTop: "1rem", color: "#ffd700" }}>{message}</p>}
         </div>
       </div>
 
@@ -129,7 +221,6 @@ const Home = () => {
           }
         }
 
-        /* 🖼️ Hero Section */
         .hero-section {
           height: 60vh;
           background-size: cover;
@@ -164,7 +255,6 @@ const Home = () => {
           font-size: 1.1rem;
         }
 
-        /* 🛍️ Featured Section */
         .featured-section {
           padding: 40px 20px;
           background: #f9f9f9;
@@ -178,31 +268,29 @@ const Home = () => {
         }
 
         .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
-}
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 20px;
+        }
 
-/* 📱 Mobile view: 2 per row */
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
+        @media (max-width: 768px) {
+          .grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
 
-  .hero-section {
-    height: 50vh;
-  }
+          .hero-section {
+            height: 50vh;
+          }
 
-  .welcome-message h2 {
-    font-size: 1.6rem;
-  }
+          .welcome-message h2 {
+            font-size: 1.6rem;
+          }
 
-  .welcome-message p {
-    font-size: 1rem;
-  }
-}
-
+          .welcome-message p {
+            font-size: 1rem;
+          }
+        }
       `}</style>
     </div>
   );
