@@ -48,11 +48,23 @@ const Category = () => {
     return nameMatch && sizeMatch;
   });
 
-  const sizes = ['L', 'XL', 'XXL', '38', '41', '44', '45', '42'];
+  const sizes = ['L', 'XL', 'XXL', '38', '41', '42', '44', '45'];
 
   return (
     <div className="page-container">
-      <h2 className="category-title capitalize">{decodedName}</h2>
+      <h2
+  className="category-title"
+  style={{
+    textAlign: 'center',      // centers the text
+    fontSize: '1.3rem',          // adjust size
+    textTransform: 'capitalize', // ensure first letter capitalized
+    margin: '20px 0',          // spacing above and below
+    color: '#9e7a7aff',             // text color
+  }}
+>
+  {decodedName}
+</h2>
+
 
       {/* ✅ Filter Bar */}
       <div

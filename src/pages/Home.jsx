@@ -108,7 +108,7 @@ const Home = () => {
 
       {/* 🛍️ Featured Products Section */}
       <div className="featured-section">
-        <h2 className="featured-title">✨ Featured Products ✨</h2>
+        <h2 className="featured-title">Featured Products</h2>
 
         <div className="grid">
           {filteredProducts.length > 0 ? (
@@ -199,7 +199,7 @@ const Home = () => {
         .scroll-banner {
           background: linear-gradient(90deg, rgb(15, 14, 14), #ff416c);
           color: white;
-          padding: 10px 0;
+          padding: 5px 0;
           font-weight: bold;
           overflow: hidden;
           white-space: nowrap;
@@ -263,7 +263,7 @@ const Home = () => {
         .featured-title {
           text-align: center;
           margin-bottom: 20px;
-          color: #333;
+          color: #946868ff;
           font-weight: bold;
         }
 
