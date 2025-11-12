@@ -142,8 +142,8 @@ const Navbar = () => {
                         <button style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
                       </form>
                       {loginError && <p style={{ color: "red", marginTop: "0.5rem" }}>{loginError}</p>}
-                      <button onClick={handleForgotPassword} style={{ display: "block", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", fontSize: "0.9rem" }}>Forgot Password?</button>
-                      <Link to="/signup" style={{ display: "block", textAlign: "center", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
+                      <button onClick={handleForgotPassword} style={{ display: "block",  fontFamily: "Arial, sans-serif", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", width: "100%", fontSize: "0.9rem" }}>Forgot Password?</button>
+                      <Link to="/signup" style={{ display: "block", textAlign: "center",  fontFamily: "Arial, sans-serif", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
                     </div>
                   )}
                 </div>
@@ -152,12 +152,61 @@ const Navbar = () => {
           </div>
 
           {/* Search Bar */}
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-            <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ flex: 1, padding: "0.5rem", borderRadius: "12px", border: "1px solid #ccc", marginRight: "5px" }} />
-            <button style={{ background: "#007bff", border: "none", borderRadius: "9px", padding: "4px", color: "#fff", cursor: "pointer" }}><MdSearch size={20} /></button>
-            {searchTerm && <button onClick={() => setSearchTerm("")} style={{ background: "none", border: "none", marginLeft: "5px", cursor: "pointer", color: "#000" }}><MdClear size={20} /></button>}
-          </div>
-
+          <div style={{ display: "flex", alignItems: "center", marginBottom: "10px", width: "100%" }}>
+            <div style={{
+              display: "flex",
+              flex: 1,
+              border: "1px solid #ccc",
+              borderRadius: "25px",
+              overflow: "hidden",
+              backgroundColor: "#fff",
+                }}>
+         <input
+            type="text"
+            placeholder="Search products..."
+             value={searchTerm}
+             onChange={(e) => setSearchTerm(e.target.value)}
+           style={{
+           flex: 1,
+           padding: "0.5rem 1rem",
+           border: "none",
+           outline: "none",
+           fontSize: "0.95rem",
+              }}
+          />
+         <button
+          onClick={() => {}}
+            style={{
+            backgroundColor: "#007bff",
+            border: "none",
+            color: "#fff",
+            padding: "0 1rem",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+             }}
+          title="Search"
+    >
+         <MdSearch size={20} />
+          </button>
+      </div>
+          {searchTerm && (
+         <button
+           onClick={() => setSearchTerm("")}
+           style={{
+           background: "none",
+           border: "none",
+           marginLeft: "8px",
+           cursor: "pointer",
+           color: "#000",
+            }}
+         title="Clear"
+          >
+         <MdClear size={20} />
+         </button>
+            )}
+        </div>
           {/* Hamburger Menu (Direct links) */}
           {showHamburgerMenu && (
             <div className="hamburger-menu" style={{ position: "absolute", top: "140px", left: 0, width: "100%", background: "#fff", boxShadow: "0 4px 10px rgba(0,0,0,0.15)", zIndex: 999, display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem 0", gap: "1rem" }}>
@@ -209,8 +258,8 @@ const Navbar = () => {
                       <button type="submit" style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
                     </form>
                     {loginError && <p style={{ color: "red", marginTop: "0.5rem" }}>{loginError}</p>}
-                    <button onClick={handleForgotPassword} style={{ display: "block", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", fontSize: "0.9rem" }}>Forgot Password?</button>
-                    <Link to="/signup" style={{ display: "block", textAlign: "center", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
+                    <button onClick={handleForgotPassword} style={{ display: "block",  fontFamily: "Arial, sans-serif", width: "100%", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", fontSize: "0.9rem" }}>Forgot Password?</button>
+                    <Link to="/signup" style={{ display: "block", "font-family": "Arial, sans-serif", fontSize: "0.9rem", textAlign: "center", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
                   </div>
                 )}
               </div>

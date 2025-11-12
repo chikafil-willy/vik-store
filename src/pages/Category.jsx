@@ -55,7 +55,7 @@ const Category = () => {
       <h2
   className="category-title"
   style={{
-    textAlign: 'center',      // centers the text
+    textAlign: 'flex-start',      // centers the text
     fontSize: '1.3rem',          // adjust size
     textTransform: 'capitalize', // ensure first letter capitalized
     margin: '20px 0',          // spacing above and below
