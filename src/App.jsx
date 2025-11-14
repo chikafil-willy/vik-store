@@ -12,6 +12,9 @@ import Profile from "./pages/Profile";
 import AboutUs from "./pages/AboutUs";
 import FAQ from "./pages/FAQ";
 import Policy from "./pages/Policy";
+import AdminDashboard from "./pages/AdminDashboard";
+import OrderTracker from "./pages/OrderTracker";
+import AdminOrders from "./pages/AdminOrders";
 
 console.log("Firebase connected:", auth);
 
@@ -29,6 +32,10 @@ const App = () => {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/policy" element={<Policy />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/order-tracker" element={<OrderTracker />} />
+        <Route path="/sdmin-dashboard-orders" element={<AdminOrders />} />
+
       </Routes>
       <Footer /> {/* ✅ Footer always visible */}
     </>

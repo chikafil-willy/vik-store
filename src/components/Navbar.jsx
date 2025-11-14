@@ -125,6 +125,7 @@ const Navbar = () => {
                   {showAccountDropdown && (
                     <div style={{ position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "0.8rem", minWidth: "150px", zIndex: 1000 }}>
                       <Link to="/profile" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Account</Link>
+                      <Link to="/order-tracker" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Order Tracker</Link>
                       <button onClick={handleSignOut} style={{ width: "100%", padding: "0.5rem", border: "none", background: "#007bff", color: "#fff", borderRadius: "6px", cursor: "pointer" }}>Sign Out</button>
                     </div>
                   )}
@@ -240,6 +241,7 @@ const Navbar = () => {
                 {showAccountDropdown && (
                   <div style={{ position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "0.5rem", minWidth: "150px", zIndex: 1000 }}>
                     <Link to="/profile" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Account</Link>
+                     <Link to="/order-tracker" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Order Tracker</Link>
                     <button onClick={handleSignOut} style={{ width: "100%", padding: "0.5rem", border: "none", background: "#007bff", color: "#fff", borderRadius: "6px", cursor: "pointer" }}>Sign Out</button>
                   </div>
                 )}
