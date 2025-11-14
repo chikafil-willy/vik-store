@@ -1,47 +1,49 @@
-// src/pages/OrderTracker.jsx
 import React, { useState, useEffect } from "react";
 import { auth, db } from "../firebase";
 import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 
 const statuses = ["All", "Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
 
-// Define colors for each status
 const statusColors = {
   All: "#ccc",
-  Pending: "#f0ad4e",      // orange
-  Processing: "#5bc0de",   // blue
-  Shipped: "#0275d8",      // dark blue
-  Delivered: "#5cb85c",    // green
-  Cancelled: "#d9534f",    // red
+  Pending: "#f0ad4e",
+  Processing: "#5bc0de",
+  Shipped: "#0275d8",
+  Delivered: "#5cb85c",
+  Cancelled: "#d9534f",
 };
 
 const OrderTracker = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true); // NEW
   const [filterStatus, setFilterStatus] = useState("All");
 
-  // Listen for user login
+  // 🔹 Listen for auth state
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((u) => setUser(u));
+    const unsubscribe = auth.onAuthStateChanged((u) => {
+      setUser(u);
+      setAuthChecking(false); // auth finished checking
+    });
     return () => unsubscribe();
   }, []);
 
-  // Fetch orders in real-time
+  // 🔹 Fetch orders after user is ready
   useEffect(() => {
     if (!user) return;
 
     setLoading(true);
+
     const q = query(
       collection(db, "orders"),
       where("uid", "==", user.uid),
-      orderBy("created_at", "desc")
+      orderBy("created_at", "desc") // requires composite index
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      // Apply status filter
-      const filtered = filterStatus === "All" ? data : data.filter(order => order.status === filterStatus);
+      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const filtered = filterStatus === "All" ? data : data.filter((o) => o.status === filterStatus);
       setOrders(filtered);
       setLoading(false);
     });
@@ -49,15 +51,15 @@ const OrderTracker = () => {
     return () => unsubscribe();
   }, [user, filterStatus]);
 
+  if (authChecking) return <p>Checking login...</p>;
   if (!user) return <p>Please log in to view your orders.</p>;
 
   return (
     <div style={{ maxWidth: 800, margin: "40px auto", padding: 20 }}>
       <h2>Order Tracker</h2>
 
-      {/* Status Filter */}
       <div style={{ marginBottom: 20 }}>
-        {statuses.map(status => (
+        {statuses.map((status) => (
           <button
             key={status}
             onClick={() => setFilterStatus(status)}
@@ -82,7 +84,7 @@ const OrderTracker = () => {
         <p>No orders found.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {orders.map(order => (
+          {orders.map((order) => (
             <li
               key={order.id}
               style={{
@@ -94,18 +96,17 @@ const OrderTracker = () => {
               }}
             >
               <p><strong>Order ID:</strong> {order.id}</p>
-              <p><strong>Placed:</strong> {new Date(order.created_at?.seconds * 1000).toLocaleDateString()}</p>
+              <p>
+                <strong>Placed:</strong>{" "}
+                {order.created_at?.seconds
+                  ? new Date(order.created_at.seconds * 1000).toLocaleDateString()
+                  : "N/A"}
+              </p>
               <p>
                 <strong>Status:</strong>{" "}
                 <span
                   style={{
-                    color:
-                      order.status === "Delivered" ? statusColors.Delivered :
-                      order.status === "Cancelled" ? statusColors.Cancelled :
-                      order.status === "Processing" ? statusColors.Processing :
-                      order.status === "Shipped" ? statusColors.Shipped :
-                      order.status === "Pending" ? statusColors.Pending :
-                      "#4a90e2",
+                    color: statusColors[order.status] || "#f0ad4e",
                     fontWeight: "bold",
                   }}
                 >
@@ -115,7 +116,12 @@ const OrderTracker = () => {
               <p><strong>Total:</strong> ₦{Number(order.total).toLocaleString()}</p>
               <p>
                 <strong>Items:</strong>{" "}
-                {order.items.map((item, i) => `${item.name} x ${item.quantity}${i < order.items.length - 1 ? ", " : ""}`)}
+                {order.items
+                  ?.map(
+                    (item, i) =>
+                      `${item.name} x ${item.quantity}${i < order.items.length - 1 ? ", " : ""}`
+                  )
+                  .join("")}
               </p>
             </li>
           ))}

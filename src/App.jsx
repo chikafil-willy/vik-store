@@ -7,7 +7,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer'; // ✅ Import Footer
 import { auth } from './firebase';
-import Signup from "./pages/Signup";
+import Signup from './pages/Signup'
 import Profile from "./pages/Profile";
 import AboutUs from "./pages/AboutUs";
 import FAQ from "./pages/FAQ";

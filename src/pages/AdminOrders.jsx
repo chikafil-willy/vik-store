@@ -17,27 +17,32 @@ const statusColors = {
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [authChecking, setAuthChecking] = useState(true);  // ⭐ FIX
   const navigate = useNavigate();
 
-  // 🔐 ADMIN EMAIL
   const ADMIN_EMAIL = "v6ix@gmail.com";
 
   useEffect(() => {
     const auth = getAuth();
 
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        navigate("/login"); // redirect if not logged in
+        navigate("/login");
         return;
       }
 
       if (user.email !== ADMIN_EMAIL) {
-        navigate("/"); // redirect to homepage if wrong email
+        navigate("/");
         return;
       }
 
-      fetchOrders(); // user is admin → fetch orders
+      // ⭐ Auth has confirmed the admin user
+      setAuthChecking(false);
+
+      fetchOrders();
     });
+
+    return () => unsubscribe();
   }, []);
 
   const fetchOrders = async () => {
@@ -64,6 +69,11 @@ const AdminOrders = () => {
     }
   };
 
+  // ⭐ Prevent showing "Loading orders" before Auth finishes checking
+  if (authChecking) {
+    return <p>Checking admin access...</p>;
+  }
+
   return (
     <div style={{ maxWidth: 800, margin: "40px auto", padding: 20 }}>
       <h2>Admin Orders Panel</h2>
@@ -87,7 +97,9 @@ const AdminOrders = () => {
               <p><strong>Order ID:</strong> {order.id}</p>
               <p>
                 <strong>Placed:</strong>{" "}
-                {order.created_at?.toDate ? order.created_at.toDate().toLocaleDateString() : ""}
+                {order.created_at?.toDate
+                  ? order.created_at.toDate().toLocaleDateString()
+                  : ""}
               </p>
               <p>
                 <strong>Status:</strong>{" "}
