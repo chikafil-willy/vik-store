@@ -1,11 +1,12 @@
+// src/firebase.jsx
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyASlSn9_GQOlbME1FOIkOb-RpODGOkWxvE",
+  apiKey: "AIzaSyASlSn9_GQOlbME1FOIkOb-RpODGOkWxvE", 
   authDomain: "vik-store-951a0.firebaseapp.com",
   projectId: "vik-store-951a0",
   storageBucket: "vik-store-951a0.appspot.com",
@@ -15,5 +16,12 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Auth
 export const auth = getAuth(app);
+
+// Google provider
+export const googleProvider = new GoogleAuthProvider();
+
+// Firestore
 export const db = getFirestore(app);

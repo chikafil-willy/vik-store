@@ -15,6 +15,7 @@ import Policy from "./pages/Policy";
 import AdminDashboard from "./pages/AdminDashboard";
 import OrderTracker from "./pages/OrderTracker";
 import AdminOrders from "./pages/AdminOrders";
+import GoogleLogin from "./components/GoogleLogin";
 
 console.log("Firebase connected:", auth);
 
@@ -38,6 +39,7 @@ const App = () => {
 
       </Routes>
       <Footer /> {/* ✅ Footer always visible */}
+      <GoogleLogin />
     </>
   );
 };

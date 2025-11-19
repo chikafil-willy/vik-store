@@ -3,6 +3,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
+import GoogleLogin from "../components/GoogleLogin";
+
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -195,6 +197,7 @@ const Signup = () => {
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
+        <GoogleLogin />
 
         {error && (
           <p

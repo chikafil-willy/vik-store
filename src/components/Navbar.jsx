@@ -15,6 +15,7 @@ import CategoryDropdown from "./CategoryDropdown"; // ✅ restored
 import { useCart } from "../context/CartContext";
 import { useSearch } from "../context/SearchContext";
 import { auth } from "../firebase";
+import GoogleLogin from "../components/GoogleLogin";
 
 const Navbar = () => {
   const { cart } = useCart();
@@ -137,6 +138,9 @@ const Navbar = () => {
                   </button>
                   {showLoginDropdown && (
                     <div style={{ position: "fixed", top: "60px", left: "50%", transform: "translateX(-50%)", background: "#fff", boxShadow: "0 4px 15px rgba(0,0,0,0.2)", borderRadius: "10px", padding: "1rem", width: "90%", maxWidth: "360px", zIndex: 2000 }}>
+                      <div style={{ marginBottom: "1rem" }}>
+                          <GoogleLogin />
+                      </div>
                       <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                         <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
                         <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
