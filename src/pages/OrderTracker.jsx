@@ -17,14 +17,14 @@ const OrderTracker = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [authChecking, setAuthChecking] = useState(true); // NEW
+  const [authChecking, setAuthChecking] = useState(true);
   const [filterStatus, setFilterStatus] = useState("All");
 
   // 🔹 Listen for auth state
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
       setUser(u);
-      setAuthChecking(false); // auth finished checking
+      setAuthChecking(false);
     });
     return () => unsubscribe();
   }, []);
@@ -42,8 +42,20 @@ const OrderTracker = () => {
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      const filtered = filterStatus === "All" ? data : data.filter((o) => o.status === filterStatus);
+      const data = snapshot.docs.map((doc) => {
+        // 🔥 DEBUG LOG to see actual status in console
+        console.log("RAW STATUS:", doc.data().status);
+        return { id: doc.id, ...doc.data() };
+      });
+
+      // 🔥 UNIVERSAL FILTER FIX
+      const filtered = data.filter((o) => {
+        // Treat undefined status as "Pending"
+        const realStatus = o.status ? o.status.toLowerCase().trim() : "pending";
+        const filter = filterStatus.toLowerCase().trim();
+        return filter === "all" ? true : realStatus === filter;
+      });
+
       setOrders(filtered);
       setLoading(false);
     });
@@ -58,6 +70,7 @@ const OrderTracker = () => {
     <div style={{ maxWidth: 800, margin: "40px auto", padding: 20 }}>
       <h2>Order Tracker</h2>
 
+      {/* 🔹 Status Filter Buttons */}
       <div style={{ marginBottom: 20 }}>
         {statuses.map((status) => (
           <button
@@ -106,7 +119,7 @@ const OrderTracker = () => {
                 <strong>Status:</strong>{" "}
                 <span
                   style={{
-                    color: statusColors[order.status] || "#f0ad4e",
+                    color: statusColors[order.status] || statusColors["Pending"],
                     fontWeight: "bold",
                   }}
                 >

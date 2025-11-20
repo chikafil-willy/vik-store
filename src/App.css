@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* ✅ Sans-serif font */
 }
 
 /* Navbar container */
@@ -166,7 +167,7 @@
   display: block;
   padding: 10px 14px;
   text-decoration: none;
-  color: #333;
+  color: #be1e1e;
   font-size: 14px;
   transition: background-color 0.3s ease;
 }
@@ -203,6 +204,7 @@
     border: 1px solid #ddd;
     padding: 8px 0;
     background-color: #afa6a6;
+    color: #007bff;
   }
 
   /* Make it show when dropdown is focused (clicked on mobile) */
@@ -693,7 +695,6 @@
   padding: 8px 14px;
   font-weight: 500;
 }
-
 .dropdown-content {
   display: none;
   position: absolute;
@@ -702,12 +703,14 @@
   min-width: 160px;
   border-radius: 6px;
   z-index: 20;
+  font-family: sans-serif; /* ✅ Add here for all text inside dropdown */
+  
 }
 
 .dropdown-content a {
   display: block;
   padding: 10px 14px;
-  color: black;
+  color: #007bff;
   text-decoration: none;
 }
 

@@ -124,10 +124,10 @@ const Navbar = () => {
                     <MdAccountCircle size={22} />
                   </button>
                   {showAccountDropdown && (
-                    <div style={{ position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "0.8rem", minWidth: "150px", zIndex: 1000 }}>
-                      <Link to="/profile" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Account</Link>
-                      <Link to="/order-tracker" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Order Tracker</Link>
-                      <button onClick={handleSignOut} style={{ width: "100%", padding: "0.5rem", border: "none", background: "#007bff", color: "#fff", borderRadius: "6px", cursor: "pointer" }}>Sign Out</button>
+                    <div style={{position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1rem", minWidth: "180px", zIndex: 1000, fontFamily: "sans-serif", fontSize: "14px"}}>
+                      <Link to="/profile" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Account</Link>
+                      <Link to="/order-tracker" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Order Tracker</Link>
+                      <Link to="/signout" style={{display: "block", color: "#007bff", textDecoration: "none"}}>Sign Out</Link>
                     </div>
                   )}
                 </div>
@@ -214,7 +214,7 @@ const Navbar = () => {
         </div>
           {/* Hamburger Menu (Direct links) */}
           {showHamburgerMenu && (
-            <div className="hamburger-menu" style={{ position: "absolute", top: "140px", left: 0, width: "100%", background: "#fff", boxShadow: "0 4px 10px rgba(0,0,0,0.15)", zIndex: 999, display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem 0", gap: "1rem" }}>
+            <div className="hamburger-menu" style={{ position: "absolute", fontFamily: "sans-serif", top: "140px", left: 0, width: "100%", background: "#fff", boxShadow: "0 4px 10px rgba(0,0,0,0.15)", zIndex: 999, display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem 0", gap: "1rem" }}>
               <Link to="/" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Home</Link>
               <Link to="/category/shirts-and-polos" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Shirts & Polos</Link>
               <Link to="/category/trousers" className="nav-link" onClick={() => setShowHamburgerMenu(false)}>Trousers</Link>
@@ -243,11 +243,11 @@ const Navbar = () => {
                   <MdAccountCircle size={24} />
                 </button>
                 {showAccountDropdown && (
-                  <div style={{ position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "0.5rem", minWidth: "150px", zIndex: 1000 }}>
-                    <Link to="/profile" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Account</Link>
-                     <Link to="/order-tracker" style={{ display: "block", marginBottom: "0.5rem", color: "#007bff", textDecoration: "none" }}>Order Tracker</Link>
-                    <button onClick={handleSignOut} style={{ width: "100%", padding: "0.5rem", border: "none", background: "#007bff", color: "#fff", borderRadius: "6px", cursor: "pointer" }}>Sign Out</button>
-                  </div>
+                   <div style={{position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1rem", minWidth: "180px", zIndex: 1000, fontFamily: "sans-serif", fontSize: "14px"}}>
+                      <Link to="/profile" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Account</Link>
+                      <Link to="/order-tracker" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Order Tracker</Link>
+                      <Link to="/signout" style={{display: "block", color: "#007bff", textDecoration: "none"}}>Sign Out</Link>
+                    </div>
                 )}
               </div>
             ) : (
@@ -258,6 +258,9 @@ const Navbar = () => {
 
                 {showLoginDropdown && (
                   <div style={{ position: "absolute", top: "40px", right: 0, background: "#fff", boxShadow: "0 4px 15px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1.8rem", minWidth: "350px", zIndex: 1000 }}>
+                    <div style={{ marginBottom: "1rem" }}>
+                          <GoogleLogin />
+                      </div>
                     <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                       <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
                       <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
