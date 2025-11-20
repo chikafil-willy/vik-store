@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer'; // ✅ Import Footer
 import { auth } from './firebase';
 import Signup from './pages/Signup'
+import Login from './pages/Login'
 import Profile from "./pages/Profile";
 import AboutUs from "./pages/AboutUs";
 import FAQ from "./pages/FAQ";
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/category/:name" element={<Category />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/faq" element={<FAQ />} />
