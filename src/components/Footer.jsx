@@ -25,7 +25,7 @@ const Footer = () => {
           alt="v6ixcollection Logo"
           style={{
             width: "90px",
-            height: "90px",
+            height: "70px",
             objectFit: "contain",
             borderRadius: "10px",
           }}
@@ -98,7 +98,7 @@ const Footer = () => {
         <a
           href="/policy"
           style={{
-            color: "#978b78ff",
+            color: "inherit",
             textDecoration: "none",
             transition: "color 0.3s ease",
           }}
@@ -111,7 +111,7 @@ const Footer = () => {
         <a
           href="/faq"
           style={{
-            color: "#978b78ff",
+            color: "inherit",
             textDecoration: "none",
             transition: "color 0.3s ease",
           }}
@@ -124,7 +124,7 @@ const Footer = () => {
         <a
           href="/about"
           style={{
-            color: "#978b78ff",
+            color: "inherit",
             textDecoration: "none",
             transition: "color 0.3s ease",
           }}

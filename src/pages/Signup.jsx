@@ -4,7 +4,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import GoogleLogin from "../components/GoogleLogin";
-
+import logo from "../assets/logo.png";
+import backgroundImg from "../assets/signup-bg.jpg"; // your background image
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -63,9 +64,7 @@ const Signup = () => {
         password: "",
       });
 
-      // Redirect to homepage after signup
-      navigate("/");
-
+      navigate("/"); // redirect after signup
     } catch (err) {
       setError(err.message);
     } finally {
@@ -80,25 +79,44 @@ const Signup = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f7f8fa",
         padding: "1rem",
+        backgroundImage: `url(${backgroundImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <div
         style={{
           width: "100%",
           maxWidth: "400px",
-          background: "#fff",
+          background: "rgba(255, 255, 255, 0.9)",
           padding: "2rem",
           borderRadius: "12px",
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
           textAlign: "center",
         }}
       >
+        {/* Logo aligned left */}
+        <div style={{ textAlign: "left", marginBottom: "1.5rem" }}>
+          <img
+            src={logo}
+            alt="v6ixcollection Logo"
+            style={{
+              width: "90px",
+              height: "40px",
+              objectFit: "contain",
+              borderRadius: "10px",
+            }}
+          />
+        </div>
+
+        {/* Heading */}
         <h2 style={{ marginBottom: "1.5rem", color: "#333" }}>
-          Create Account
+          Create Your Account
         </h2>
 
+        {/* Signup Form */}
         <form
           onSubmit={handleSignup}
           style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
@@ -117,7 +135,6 @@ const Signup = () => {
               fontSize: "1rem",
             }}
           />
-
           <input
             type="tel"
             name="phone"
@@ -132,7 +149,6 @@ const Signup = () => {
               fontSize: "1rem",
             }}
           />
-
           <input
             type="text"
             name="address"
@@ -147,7 +163,6 @@ const Signup = () => {
               fontSize: "1rem",
             }}
           />
-
           <input
             type="email"
             name="email"
@@ -162,7 +177,6 @@ const Signup = () => {
               fontSize: "1rem",
             }}
           />
-
           <input
             type="password"
             name="password"
@@ -177,7 +191,6 @@ const Signup = () => {
               fontSize: "1rem",
             }}
           />
-
           <button
             type="submit"
             disabled={loading}
@@ -197,8 +210,10 @@ const Signup = () => {
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
+
         <GoogleLogin />
 
+        {/* Error / Success */}
         {error && (
           <p
             style={{

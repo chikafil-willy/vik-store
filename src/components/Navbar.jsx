@@ -127,7 +127,11 @@ const Navbar = () => {
                     <div style={{position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1rem", minWidth: "180px", zIndex: 1000, fontFamily: "sans-serif", fontSize: "14px"}}>
                       <Link to="/profile" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Account</Link>
                       <Link to="/order-tracker" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Order Tracker</Link>
-                      <Link to="/signout" style={{display: "block", color: "#007bff", textDecoration: "none"}}>Sign Out</Link>
+                     <span 
+                      onClick={handleSignOut} 
+                        style={{ display: "block", marginBottom: "0", color: "#007bff", textDecoration: "none", cursor: "pointer" }}> 
+                        Sign Out
+                    </span>
                     </div>
                   )}
                 </div>
@@ -138,23 +142,32 @@ const Navbar = () => {
                   </button>
                   {showLoginDropdown && (
                     <div style={{ position: "fixed", top: "60px", left: "50%", transform: "translateX(-50%)", background: "#fff", boxShadow: "0 4px 15px rgba(0,0,0,0.2)", borderRadius: "10px", padding: "1rem", width: "90%", maxWidth: "360px", zIndex: 2000 }}>
+                      <div>
+                        <img
+                        src={logo}
+                        alt="v6ixcollection Logo"
+                          style={{width: "90px", height: "40px", objectFit: "contain", borderRadius: "10px", justifyContent: "center",
+                                }}/>
+                        </div>
                       <div style={{ marginBottom: "1rem" }}>
                           <GoogleLogin />
                       </div>
                       <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                         <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
                         <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
-                        <button style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
+                        <button style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", fontSize: "0.9rem", color: "#fff", cursor: "pointer" }}>Login</button>
                       </form>
                       {loginError && <p style={{ color: "red", marginTop: "0.5rem" }}>{loginError}</p>}
                       <button onClick={handleForgotPassword} style={{ display: "block",  fontFamily: "Arial, sans-serif", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", width: "100%", fontSize: "0.9rem" }}>Forgot Password?</button>
-                      <Link to="/signup" style={{ display: "block", textAlign: "center",  fontFamily: "Arial, sans-serif", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
+                        <p style={{ textAlign: "center", fontFamily: "Arial, sans-serif", marginTop: "1rem", fontSize: "0.9rem" }}>
+                          New to V6ix Collection?{" "}
+                            <Link to="/signup"
+                              style={{ color: "#007bff", textDecoration: "none", marginLeft: "0.2rem" }}> Sign Up</Link></p>
+                              </div>)}
+                             </div>
+                             )}
+                          </div>
+                      </div>
 
           {/* Search Bar */}
           <div style={{ display: "flex", alignItems: "center", marginBottom: "10px", width: "100%" }}>
@@ -246,7 +259,11 @@ const Navbar = () => {
                    <div style={{position: "absolute", top: "35px", right: 0, background: "#fff", boxShadow: "0 2px 10px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1rem", minWidth: "180px", zIndex: 1000, fontFamily: "sans-serif", fontSize: "14px"}}>
                       <Link to="/profile" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Account</Link>
                       <Link to="/order-tracker" style={{display: "block", marginBottom: "1.2rem", color: "#007bff", textDecoration: "none"}}>Order Tracker</Link>
-                      <Link to="/signout" style={{display: "block", color: "#007bff", textDecoration: "none"}}>Sign Out</Link>
+                       <span 
+                         onClick={handleSignOut} 
+                          style={{ display: "block", marginBottom: "0", color: "#007bff", textDecoration: "none", cursor: "pointer" }}> 
+                            Sign Out
+                        </span>
                     </div>
                 )}
               </div>
@@ -258,17 +275,27 @@ const Navbar = () => {
 
                 {showLoginDropdown && (
                   <div style={{ position: "absolute", top: "40px", right: 0, background: "#fff", boxShadow: "0 4px 15px rgba(0,0,0,0.15)", borderRadius: "8px", padding: "1.8rem", minWidth: "350px", zIndex: 1000 }}>
+                    <div>
+                        <img
+                        src={logo}
+                        alt="v6ixcollection Logo"
+                          style={{width: "90px", height: "40px", objectFit: "contain", borderRadius: "10px", justifyContent: "center",
+                                }}/>
+                        </div>
                     <div style={{ marginBottom: "1rem" }}>
                           <GoogleLogin />
                       </div>
                     <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                       <input type="email" placeholder="Email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
                       <input type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} style={{ padding: "0.8rem", borderRadius: "6px", border: "1px solid #ccc" }} required />
-                      <button type="submit" style={{ padding: "0.5rem", border: "none", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
+                      <button type="submit" style={{ padding: "0.5rem", border: "none", fontSize: "0.9rem", borderRadius: "6px", background: "#007bff", color: "#fff", cursor: "pointer" }}>Login</button>
                     </form>
                     {loginError && <p style={{ color: "red", marginTop: "0.5rem" }}>{loginError}</p>}
                     <button onClick={handleForgotPassword} style={{ display: "block",  fontFamily: "Arial, sans-serif", width: "100%", background: "none", border: "none", color: "#007bff", textAlign: "center", marginTop: "0.5rem", cursor: "pointer", fontSize: "0.9rem" }}>Forgot Password?</button>
-                    <Link to="/signup" style={{ display: "block", "font-family": "Arial, sans-serif", fontSize: "0.9rem", textAlign: "center", marginTop: "0.5rem", color: "#007bff", textDecoration: "none" }}>Sign Up</Link>
+                     <p style={{ textAlign: "center", fontFamily: "Arial, sans-serif", marginTop: "1rem", fontSize: "0.9rem" }}>
+                      New to V6ix Collection?{" "}
+                      <Link to="/signup"
+                      style={{ color: "#007bff", textDecoration: "none", marginLeft: "0.2rem" }}> Sign Up</Link></p>
                   </div>
                 )}
               </div>
