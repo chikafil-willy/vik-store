@@ -24,18 +24,20 @@ const GoogleLogin = () => {
         fontFamily: "Arial, sans-serif",
       }}
     >
-      <a
-        href="#"
+      <button
         onClick={handleGoogleLogin}
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "8px",
-          textDecoration: "none",
-          color: "#000",
-          fontSize: "0.9rem",
-          fontWeight: "500",
+          gap: "10px",
+          backgroundColor: "#000",
+          color: "#fff",
+          padding: "0.7rem 1.2rem",
+          border: "none",
+          borderRadius: "19px",
           cursor: "pointer",
+          fontSize: "0.95rem",
+          fontWeight: "600",
         }}
       >
         <img
@@ -44,7 +46,7 @@ const GoogleLogin = () => {
           style={{ width: "20px", height: "20px" }}
         />
         <span>Login with Google</span>
-      </a>
+      </button>
     </div>
   );
 };

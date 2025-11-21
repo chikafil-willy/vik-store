@@ -46,16 +46,18 @@ const Login = () => {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         minHeight: "100vh",
-        padding: "2rem",
+        padding: window.innerWidth > 768 ? "1rem" : "0.5rem",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       <div
         style={{
-          maxWidth: "450px",
+          maxWidth: window.innerWidth > 768 ? "450px" : "99%",   // Desktop vs Mobile
+          height: window.innerWidth > 768 ? "500px" : "499px",     // Desktop vs Mobile
           width: "100%",
+          width: window.innerWidth > 768 ? "100%" : "100%",     // Mobile uses full width
           padding: "1rem",
           border: "1px solid #ccc",
           borderRadius: "10px",
@@ -68,14 +70,14 @@ const Login = () => {
         </div>
 
         <div style={{ textAlign: "center" }}>
-          <h2>Login</h2>
+          <h2>👋 Welcome to V6ixCollection</h2>
         </div>
 
         <GoogleLogin />
 
         <form
           onSubmit={handleLogin}
-          style={{ display: "flex", flexDirection: "column", gap: "1rem", marginTop: "1rem" }}
+          style={{ display: "flex", flexDirection: "column", gap: "1.4rem", marginTop: "1rem" }}
         >
           <input
             type="email"
@@ -115,7 +117,7 @@ const Login = () => {
 
         <button
           onClick={handleForgotPassword}
-          style={{ marginTop: "0.8rem", background: "none", border: "none", color: "#007bff", cursor: "pointer" }}
+          style={{ marginTop: "1.0rem", background: "none", border: "none", fontSize: "15px", color: "#007bff", cursor: "pointer" }}
         >
           Forgot Password?
         </button>

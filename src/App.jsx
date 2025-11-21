@@ -40,11 +40,9 @@ const App = () => {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/order-tracker" element={<OrderTracker />} />
         <Route path="/sdmin-dashboard-orders" element={<AdminOrders />} />
-
       </Routes>
       <Footer /> {/* ✅ Footer always visible */}
       <LocationPopup />
-      <GoogleLogin />
     </>
   );
 };
