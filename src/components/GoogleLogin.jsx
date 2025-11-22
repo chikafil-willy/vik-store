@@ -1,14 +1,43 @@
 import React from "react";
 import { auth, googleProvider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
+import { db } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import GoogleLogo from "../assets/google.png";
 
 const GoogleLogin = () => {
   const handleGoogleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithPopup(auth, googleProvider);
-      console.log("Logged in successfully");
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Create or update Firestore profile
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          name: user.displayName || "",
+          phone: "",
+          address: "",
+          email: user.email,
+          photoURL: user.photoURL || "",
+          createdAt: new Date(),
+        });
+      } else {
+        await setDoc(
+          userRef,
+          {
+            name: user.displayName || "",
+            email: user.email,
+            photoURL: user.photoURL || "",
+          },
+          { merge: true }
+        );
+      }
+
+      console.log("Google login & profile saved");
     } catch (error) {
       console.log("Google Login Error:", error.message);
     }
