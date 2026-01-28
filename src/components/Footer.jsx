@@ -143,7 +143,7 @@ const Footer = () => {
           margin: "0.3rem 0",
         }}
       >
-        © 2025 v6ixcollection. All rights reserved.
+        © {new Date().getFullYear()} v6ixcollection. All rights reserved.
       </p>
     </footer>
   );
