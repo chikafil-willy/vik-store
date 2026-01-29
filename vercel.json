@@ -9,10 +9,6 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel.app https://*.supabase.co https://securetoken.googleapis.com https://identitytoolkit.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://images.unsplash.com https:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://*.supabase.co https://securetoken.googleapis.com https://identitytoolkit.googleapis.com wss://*.supabase.co; frame-ancestors 'none';"
-        },
-        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },

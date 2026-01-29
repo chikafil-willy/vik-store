@@ -6,6 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>V6ix Collection</title>
 
+    <!-- 🔐 Content Security Policy (WORKING) -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src
+          'self'
+          'unsafe-inline'
+          'unsafe-eval'
+          https://static.getbutton.io;
+        style-src
+          'self'
+          'unsafe-inline'
+          https://fonts.googleapis.com;
+        img-src
+          'self'
+          data:
+          blob:
+          https:
+          https://*.supabase.co;
+        font-src
+          'self'
+          https://fonts.gstatic.com
+          data:;
+        connect-src
+          'self'
+          https://vnwhmwwknjuzosarlump.supabase.co
+          https://securetoken.googleapis.com
+          https://identitytoolkit.googleapis.com
+          wss://vnwhmwwknjuzosarlump.supabase.co;
+        frame-ancestors 'none';
+      "
+    />
+
     <!-- ✅ Material Icons -->
     <link
       rel="stylesheet"
@@ -22,10 +56,10 @@
     <script type="text/javascript">
       (function () {
         var options = {
-          whatsapp: "08180552305", // ← CHANGE TO YOUR NUMBER
-          call_to_action: "Chat with us", // optional, can leave empty ""
+          whatsapp: "08180552305",
+          call_to_action: "Chat with us",
           position: "right",
-          branding: false, // ✅ removes "GetButton" text
+          branding: false,
         };
         var proto = document.location.protocol,
           host = "getbutton.io",
